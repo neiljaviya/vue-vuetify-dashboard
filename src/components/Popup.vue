@@ -67,7 +67,11 @@
             </v-col>
           </v-row>
 
-          <v-btn text class="grey white--text mx-0 mt-5" @click="submit"
+          <v-btn
+            text
+            class="grey white--text mx-0 mt-5"
+            @click="submit"
+            :loading="submitbtnload"
             >Add Project</v-btn
           >
         </v-form>
@@ -78,7 +82,7 @@
 
 <script>
 import { format, parseISO } from "date-fns";
-import db from '@/firebase'
+import db from "@/firebase";
 
 export default {
   data() {
@@ -89,6 +93,7 @@ export default {
       title: "",
       content: "",
       person: "",
+      submitbtnload: false,
       names: [
         "Neil Javiya",
         "Happy Manvar",
@@ -111,18 +116,25 @@ export default {
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
+        this.submitbtnload = true;
         const project = {
           title: this.title,
           content: this.content,
           due: this.formattedDate,
           person: this.person,
-          status: 'Ongoing'
-        }
-        
-        db.collection('projects').add(project).then(() => {
-          this.dialog = false;
-        })
-        
+          status: "Ongoing",
+        };
+
+        db.collection("projects")
+          .add(project)
+          .then(() => {
+            this.dialog = false;
+            this.submitbtnload = false;
+            this.title = "";
+            this.content = "";
+            this.person = "";
+            this.$emit('projectAdded')
+          });
       }
     },
   },

@@ -1,5 +1,11 @@
 <template>
   <nav>
+
+    <v-snackbar v-model="snackba" :timeout="4000" top color="success">
+      <span>New Project Added..!!</span>
+      <v-btn text color="white" @click="snackba = false" right>Close</v-btn>
+    </v-snackbar>
+
     <v-toolbar flat app dark>
       <v-app-bar-nav-icon
         class="grey--text"
@@ -56,7 +62,7 @@
       </v-list-item>
       <v-row class="mt-4 mb-3">
         <v-spacer></v-spacer>
-          <Popup />
+          <Popup @projectAdded="snackba = true"/>
         <v-spacer></v-spacer>
         </v-row>
       <v-list dense>
@@ -88,6 +94,7 @@ export default {
   data() {
     return {
       drawer: false,
+      snackba: false,
       links: [
         { icon: "mdi-view-dashboard", text: "Dashboard", route: "/" },
         { icon: "mdi-folder", text: "Projects", route: "/projects" },
